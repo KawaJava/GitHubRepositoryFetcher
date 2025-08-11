@@ -47,9 +47,19 @@ class GitHubUserControllerHappyPathIT {
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
         RepositoryWithBranches[] repos = response.getBody();
         assertThat(repos).isNotNull().isNotEmpty();
-        assertThat(repos).allMatch(r -> r.repositoryName() != null && !r.repositoryName().isBlank());
+
+        assertThat(repos).allSatisfy(repository -> {
+            assertThat(repository.repositoryName()).isNotBlank();
+            assertThat(repository.ownerLogin()).isNotBlank();
+            assertThat(repository.branches()).isNotEmpty();
+            repository.branches().forEach(branch -> {
+                assertThat(branch.name()).isNotBlank();
+                assertThat(branch.lastCommitSha()).matches("^[0-9a-f]{40}$");
+            });
+        });
 
         RepositoryWithBranches helloWorld = Arrays.stream(repos)
                 .filter(r -> "Hello-World".equalsIgnoreCase(r.repositoryName()))
@@ -57,10 +67,6 @@ class GitHubUserControllerHappyPathIT {
                 .orElseThrow(() -> new AssertionError("Brak repo Hello-World"));
 
         assertThat(helloWorld.ownerLogin()).isEqualToIgnoringCase(username);
-        assertThat(helloWorld.branches()).isNotEmpty()
-                .allSatisfy(branch -> {
-                    assertThat(branch.name()).isNotBlank();
-                    assertThat(branch.lastCommitSha()).matches("^[0-9a-f]{40}$");
-                });
     }
+
 }

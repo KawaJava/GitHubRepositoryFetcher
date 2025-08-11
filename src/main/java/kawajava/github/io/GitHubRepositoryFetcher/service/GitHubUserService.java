@@ -22,18 +22,28 @@ public class GitHubUserService {
     private String githubApiUrl;
 
     public List<RepositoryWithBranches> getGitHubUserRepositoriesData(String username) {
-        List<RepositoryDto> repos = fetchRepositories(username);
-
-        return repos.stream()
-                .filter(repo -> !repo.isFork())
-                .map(repo -> new RepositoryWithBranches(
-                        repo.name(),
-                        repo.owner().login(),
-                        fetchBranches(username, repo.name()).stream()
-                                .map(b -> new Branch(b.name(), b.commit().sha()))
-                                .toList()
-                ))
+        return fetchRepositories(username).stream()
+                .filter(repository -> !repository.isFork())
+                .map(repository -> {
+                    var branches = fetchBranches(username, repository.name());
+                    return mapToRepositoryWithBranches(repository, branches);
+                })
                 .toList();
+    }
+
+    private RepositoryWithBranches mapToRepositoryWithBranches(RepositoryDto repositoryDto,
+                                                               List<BranchDto> branchDtos) {
+        return new RepositoryWithBranches(
+                repositoryDto.name(),
+                repositoryDto.owner().login(),
+                branchDtos.stream()
+                        .map(this::mapToBranch)
+                        .toList()
+        );
+    }
+
+    private Branch mapToBranch(BranchDto branchDto) {
+        return new Branch(branchDto.name(), branchDto.commit().sha());
     }
 
     private List<RepositoryDto> fetchRepositories(String username) {
