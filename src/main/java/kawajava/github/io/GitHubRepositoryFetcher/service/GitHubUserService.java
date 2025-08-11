@@ -4,15 +4,10 @@ import kawajava.github.io.GitHubRepositoryFetcher.exception.NotExistingUserExcep
 import kawajava.github.io.GitHubRepositoryFetcher.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +37,7 @@ public class GitHubUserService {
     }
 
     private List<RepositoryDto> fetchRepositories(String username) {
-        String url = githubApiUrl + "/users/{username}/repos";
+        var url = githubApiUrl + "/users/{username}/repos";
         try {
             ResponseEntity<RepositoryDto[]> response = restTemplate.getForEntity(url, RepositoryDto[].class, username);
             return Arrays.asList(Objects.requireNonNull(response.getBody()));
@@ -52,7 +47,7 @@ public class GitHubUserService {
     }
 
     private List<BranchDto> fetchBranches(String username, String repoName) {
-        String url = githubApiUrl + "/repos/{user}/{repo}/branches";
+        var url = githubApiUrl + "/repos/{user}/{repo}/branches";
         ResponseEntity<BranchDto[]> response = restTemplate.getForEntity(url, BranchDto[].class, username, repoName);
         return Arrays.asList(Objects.requireNonNull(response.getBody()));
     }

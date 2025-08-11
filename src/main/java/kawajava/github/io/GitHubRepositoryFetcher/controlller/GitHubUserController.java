@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -25,9 +24,9 @@ public class GitHubUserController {
     public List<RepositoryWithBranches> getUserData(@PathVariable String username,
             @RequestHeader(HttpHeaders.ACCEPT) String accept
     ) {
-//        if (!MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(accept)) {
-//            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-//        }
+        if (!MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(accept)) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
         return userService.getGitHubUserRepositoriesData(username);
     }
 }

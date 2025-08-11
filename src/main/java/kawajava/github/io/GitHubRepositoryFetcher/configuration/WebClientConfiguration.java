@@ -6,20 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfiguration {
 
     @Value("${github.api.base.url}")
     private String githubApiBaseUrl;
-
-    @Bean
-    public WebClient webClient() {
-        return WebClient.builder()
-                .baseUrl(githubApiBaseUrl)
-                .build();
-    }
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
