@@ -53,8 +53,7 @@ W projekcie znajduje się test integracyjny GitHubUserControllerHappyPathIT, kt�
 - sprawdza, czy każde repo zawiera niepuste pola oraz gałęzie z poprawnym SHA ostatnich commitów.
 - test integracyjny nie używa mocków, korzysta z rzeczywistego API GitHub.
 
-
-# GitHub Repositories API
+# English-version
 
 ## Application Description
 
