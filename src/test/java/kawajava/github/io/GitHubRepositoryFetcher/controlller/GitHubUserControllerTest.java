@@ -36,10 +36,9 @@ class GitHubUserControllerHappyPathIT {
         // given
         var username = "octocat";
         var url = "http://localhost:" + port + "/" + username;
-
         var headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        var entity = new HttpEntity<>(headers);
 
         // when
         ResponseEntity<RepositoryWithBranches[]> response =
@@ -50,7 +49,6 @@ class GitHubUserControllerHappyPathIT {
 
         RepositoryWithBranches[] repos = response.getBody();
         assertThat(repos).isNotNull().isNotEmpty();
-
         assertThat(repos).allSatisfy(repository -> {
             assertThat(repository.repositoryName()).isNotBlank();
             assertThat(repository.ownerLogin()).isNotBlank();
@@ -68,5 +66,4 @@ class GitHubUserControllerHappyPathIT {
 
         assertThat(helloWorld.ownerLogin()).isEqualToIgnoringCase(username);
     }
-
 }
