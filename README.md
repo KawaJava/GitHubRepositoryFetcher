@@ -1,6 +1,6 @@
 # GitHub Repositories API
 
-## 🇬🇧 [English version](README.en.md)
+## 🇬🇧 [English version](#english-version)
 
 ## Opis aplikacji
 
